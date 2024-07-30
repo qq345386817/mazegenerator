@@ -16,6 +16,7 @@ class Maze {
   void GenerateMaze(SpanningtreeAlgorithm*);
   void PrintMazeGnuplot(const std::string&, bool = false) const;
   void PrintMazeSVG(const std::string&, bool = false) const;
+  std::string MazeSVGString(bool = false) const;
   virtual void InitialiseGraph() = 0;
 
  protected:

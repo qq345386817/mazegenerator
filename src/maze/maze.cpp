@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include "depthfirstsearch.h"
+#include <sstream>
+#include <string>
 
 Maze::Maze(int vertices, int startvertex, int endvertex)
     : vertices_(vertices), startvertex_(startvertex), endvertex_(endvertex) {}
@@ -119,4 +121,32 @@ void Maze::PrintMazeSVG(const std::string& outputprefix, bool solution) const {
   }
   svgfile << "</g>" << std::endl;
   svgfile << "</svg>" << std::endl;
+}
+
+std::string Maze::MazeSVGString(bool solution) const {
+  std::stringstream svgfile;
+  double xmin, ymin, xmax, ymax;
+  std::tie(xmin, ymin, xmax, ymax) = GetCoordinateBounds();
+  int xresolution = (xmax - xmin + 2) * 30,
+      yresolution = (ymax - ymin + 2) * 30;
+
+  svgfile << "<svg width=\"" << xresolution << "\" height=\"" << yresolution
+          << "\" xmlns=\"http://www.w3.org/2000/svg\">" << std::endl;
+  svgfile << "<g transform=\"translate(" << (1 - xmin) * 30 << ","
+          << yresolution - (1 - ymin) * 30 << ") scale(1,-1)\">" << std::endl;
+  svgfile << "<rect x=\"" << (xmin - 1) * 30 << "\" y=\"" << (ymin - 1) * 30
+          << "\" width=\"" << xresolution << "\" height=\"" << yresolution
+          << "\" fill=\"white\"/>" << std::endl;
+
+  for (int i = 0; i < vertices_; ++i) {
+    for (const auto& edge : adjacencylist_[i]) {
+      if (std::get<0>(edge) < i) {
+        svgfile << std::get<1>(edge)->SVGPrintString("black") << "\n";
+      }
+    }
+  }
+  svgfile << "</g>" << std::endl;
+  svgfile << "</svg>" << std::endl;
+  std::string result = svgfile.str();
+  return result;
 }
