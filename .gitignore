@@ -5,3 +5,4 @@ tags
 *.o
 examples/*_*.png
 examples/*_*.svg
+.DS_Store

@@ -14,18 +14,20 @@ void RectangularMaze::InitialiseGraph() {
 
   // Lower and upper boundaries
   for (int i = 0; i < width_; ++i) {
-    adjacencylist_[VertexIndex(0, i)].push_back(
+    if (i != 0) // Change leaving space for entry and exit to top and bottom
+      adjacencylist_[VertexIndex(0, i)].push_back(
         {-1, std::make_shared<LineBorder>(i, 0, i + 1, 0)});
-    adjacencylist_[VertexIndex(height_ - 1, i)].push_back(
+    if (i != width_ - 1)
+      adjacencylist_[VertexIndex(height_ - 1, i)].push_back(
         {-1, std::make_shared<LineBorder>(i, height_, i + 1, height_)});
   }
 
   // Left and right boundaries, leaving space for entry and exit
   for (int i = 0; i < height_; ++i) {
-    if (i != 0)
+    // if (i != 0)
       adjacencylist_[VertexIndex(i, 0)].push_back(
           {-1, std::make_shared<LineBorder>(0, i, 0, i + 1)});
-    if (i != height_ - 1)
+    // if (i != height_ - 1)
       adjacencylist_[VertexIndex(i, 0)].push_back(
           {-1, std::make_shared<LineBorder>(width_, i, width_, i + 1)});
   }
